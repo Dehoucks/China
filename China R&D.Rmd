@@ -3,8 +3,8 @@ title: "China R&D"
 author: "RobinDehouck"
 date: "22/01/2020"
 output:
-  ioslides_presentation: default
   beamer_presentation: default
+  ioslides_presentation: default
 ---
 
 ```{r setup, include=FALSE}
