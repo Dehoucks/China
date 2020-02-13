@@ -1,0 +1,67 @@
+---
+title: "Why this country ?"
+author: "Robin Dehouck"
+output:
+  pdf_document:
+    highlight: pygments
+    toc: yes
+  word_document:
+    toc: yes
+  html_document:
+    toc: yes
+editor_options:
+  chunk_output_type: inline
+---
+
+# Why this country ?
+
+## Introduction
+
+With a **major influence** over Asia, but whose footprint is global, **China** is a **superpower**. With a GDP of more than $ *12* trillion, the **second largest economy** in the world since *2010*, in possession of the **second largest military budget** in the world and possessing nuclear weapons, China also plays a decisive role in **global governance**, thanks in particular to its headquarters in permanent member of the United Nations Security Council.
+
+```{r echo = FALSE}
+
+
+library(ggplot2)
+library(maps)
+world <- map_data("world")
+world <- subset(world, region != "Antarctica")
+
+
+china <- subset(world, region %in% c("China"))
+china$code <- 1
+  ggplot(data = world, aes(x = long, y = lat, group = group)) + 
+  geom_polygon(fill = "black", color = "black", size = 0.3) +
+  geom_polygon(data = china, aes(fill = code), color = "black", size = 0.3) +
+ 
+  scale_fill_gradient(low = "red", high = "red") +
+    #La CHINE est en rouge 
+  coord_fixed(1.5) +
+  theme_gray() + 
+  theme(legend.position = "none")
+```
+
+
+
+## A recent superpower
+
+
+```{r echo = FALSE, warning = FALSE}
+
+
+library(WDI)
+
+chinagdp <- WDI(country = "CN",indicator = "NY.GDP.MKTP.CD", start = 1970 )
+chinagdp <- dplyr::rename(chinagdp, gdp = NY.GDP.MKTP.CD )
+ggplot(chinagdp, aes(x=year, y=gdp)) + 
+  geom_bar(stat = "identity")
+
+```
+
+China's **economic development is fast**: its GDP growth between *2008* and *2018* is equal to more than *290*%.
+
+Following my trip to China for one semester back to *2018*, the discovery of this territory where everything is done much faster than in Europe caught my attention. Combined with this mysterious meteoric growth, the study of this country can only be fascinating.
+
+
+
+

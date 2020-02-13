@@ -1,0 +1,91 @@
+---
+title: "China R&D"
+author: "RobinDehouck"
+date: "22/01/2020"
+output:
+  ioslides_presentation: default
+  beamer_presentation: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Impactful Visualization
+
+Will China become the next "hyperpower" ?
+
+In this visualisation, we will focus on one indicator, which is revelant of the economic growth of China.
+This presentation deals with the importance of Research and Development in China.
+
+
+
+
+
+## Research and development expenditure (% of GDP) - China
+  
+
+```{r echo = FALSE, warning = FALSE, message=FALSE}
+library(WDI)
+library(ggplot2)
+library()
+
+inno <- WDI(country = "CN",indicator = "GB.XPD.RSDV.GD.ZS", start = 1996 )
+
+inno <- dplyr::rename(inno, Expenses = GB.XPD.RSDV.GD.ZS)
+
+
+
+ggplot(data = inno) + 
+  
+  geom_point(mapping = aes(x = year, y = Expenses)) +
+geom_smooth(mapping = aes(x = year, y = Expenses))
+```
+
+## Evolution of the expenses of China in R&D
+
+In the last graphic, we saw that China invests more and more money in research and development. In order to measure this evolution, it is revelant to compare it to others countries. 
+
+## Same study compared to developed countries
+
+```{r pressureecho = FALSE, warning = FALSE, message=FALSE}
+
+
+allinno <- WDI(country = c("CN","FR","GB","DE","US") ,indicator = "GB.XPD.RSDV.GD.ZS", start = 1996 )
+
+allinno <- dplyr::rename(allinno, Expenses = GB.XPD.RSDV.GD.ZS)
+
+
+
+ggplot(data = allinno, mapping= aes(color = country)) + 
+  
+  geom_point(mapping = aes(x = year, y = Expenses)) +
+geom_smooth(mapping = aes(x = year, y = Expenses))
+```
+
+## Evolution of the expenses of China in R&D
+
+Compared to developed countries, we can see that the expenses of China towards R&D are equivalent. But nowadays, China remain a developing country. It may be revelant to compare China with the developing countries.
+
+## Same study compared to developing countries
+
+```{r pressureecho = FALSE, warning = FALSE, message=FALSE}
+
+
+devinno <- WDI(country = c("BR","CN","RU","IA","ZA") ,indicator = "GB.XPD.RSDV.GD.ZS", start = 1996 )
+
+devinno <- dplyr::rename(devinno, Expenses = GB.XPD.RSDV.GD.ZS)
+
+
+
+ggplot(data = devinno, mapping= aes(color = country)) + 
+  
+  geom_point(mapping = aes(x = year, y = Expenses)) +
+geom_smooth(mapping = aes(x = year, y = Expenses))
+
+
+```
+
+## Evolution of the expenses of China in R&D
+
+Compared to developing countries, we can see that China is investing significantly more than these countries. This information indicates us that China can't be compared anymore with developing countries such as South Africa, because since the year 2000, the evolution of China have been fast.
