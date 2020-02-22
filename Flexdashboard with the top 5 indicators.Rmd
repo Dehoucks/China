@@ -2,7 +2,8 @@
 title: "Flexdashboard with the top 5 indicators"
 output: 
   flexdashboard::flex_dashboard:
-        orientation: rows
+    orientation : columns
+    vertical_layout : fill
 
     
 ---
@@ -24,10 +25,10 @@ options(scipen = 999) ## To disable scientific notation
 
 # GDP
 
-Row {data-height=650}
+Column {data-width=600}
 -------------------------------------
-
-### GDP(US $)
+    
+###                                                                                  GDP(US $)
 
 ```{r}
 
@@ -40,10 +41,10 @@ chinagdp <- dplyr::rename(chinagdp, gdp = NY.GDP.MKTP.CD )
 ggplot(data = chinagdp, aes(x = year, y = gdp, colour = country)) + 
   geom_line()
 ```
-
-Row {data-height=350}
+   
+Column {data-width=400}
 -------------------------------------
-    
+   
 ### GDP growth rate of China (2000 -> 2017)
     
 ```{r}
@@ -52,11 +53,18 @@ gauge(1010, min = 0, max = 1100, symbol = '%', gaugeSectors(
   success = c(1000, 1100), warning = c(40, 79), danger = c(0, 39)))
   
 ```
-    
-### Description
+ 
+###                                                                                 Description
 
 
 China has the **world's fastest-growing major economy**, with growth rates averaging *6%*. In this topic, we will study different interesting indicators comparing China to developed countries, and will try to understand **why China is still a developing country**.
+
+
+
+
+    
+
+    
 
 
 
