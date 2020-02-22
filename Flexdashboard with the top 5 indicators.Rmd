@@ -1,0 +1,190 @@
+---
+title: "Flexdashboard with the top 5 indicators"
+output: 
+  flexdashboard::flex_dashboard:
+        orientation: rows
+
+    
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(WDI)
+library(dplyr)
+library(stringr)
+library(ggplot2)
+library(maps)
+
+options(scipen = 999) ## To disable scientific notation
+
+```
+
+
+-----------------------------------------------------------------------
+
+# GDP
+
+Row {data-height=650}
+-------------------------------------
+
+### GDP(US $)
+
+```{r}
+
+# Gdp of countries since 1970
+chinagdp <- WDI(country = c("FR", "CA", "US","CN"),indicator = "NY.GDP.MKTP.CD", start = 1970 )
+chinagdp <- dplyr::rename(chinagdp, gdp = NY.GDP.MKTP.CD )
+
+
+
+ggplot(data = chinagdp, aes(x = year, y = gdp, colour = country)) + 
+  geom_line()
+```
+
+Row {data-height=350}
+-------------------------------------
+    
+### GDP growth rate of China (2000 -> 2017)
+    
+```{r}
+# indicator
+gauge(1010, min = 0, max = 1100, symbol = '%', gaugeSectors(
+  success = c(1000, 1100), warning = c(40, 79), danger = c(0, 39)))
+  
+```
+    
+### Description
+
+
+China has the **world's fastest-growing major economy**, with growth rates averaging *6%*. In this topic, we will study different interesting indicators comparing China to developed countries, and will try to understand **why China is still a developing country**.
+
+
+
+# Research and development expenditure (% of GDP) - China
+
+```{r echo = FALSE, warning = FALSE, message=FALSE}
+# Visual on R&D
+allinno <- WDI(country = c("CN","FR","GB","DE","US") ,indicator = "GB.XPD.RSDV.GD.ZS", start = 1996 )
+
+allinno <- dplyr::rename(allinno, Expenses = GB.XPD.RSDV.GD.ZS)
+
+
+
+ggplot(data = allinno, mapping= aes(color = country)) + 
+  
+  geom_point(mapping = aes(x = year, y = Expenses)) +
+geom_smooth(mapping = aes(x = year, y = Expenses))
+# End Visual on R&D
+```
+
+# HDI
+
+```{r echo = FALSE, warning = FALSE, message=FALSE}
+# MAP showing HDI per country in 2017
+
+world <- map_data("world")
+worldplot <- ggplot() +
+  geom_polygon(data = world, aes(x=long, y = lat, group = group)) + 
+  coord_fixed(1.3)
+
+# Loading Data
+worldgovt <- read.csv("./world-govt.csv", header = TRUE)
+worldgovt <- select(worldgovt, region = indicator, "HDI" = `human.development.index`, "CC" = ISO.Country.code)
+
+## Check for disagreements between the two datasets
+diff <- setdiff(world$region, worldgovt$region)
+
+## Clean the dataset accordingly
+worldgovt <- worldgovt %>%
+  ## Recode certain entries
+  mutate(region = recode(str_trim(region), "United States" = "USA",
+                            "United Kingdom" = "UK",
+                            "Korea (Rep.)" = "South Korea",
+                            "Congo (Dem. Rep.)" = "Democratic Republic of the Congo",
+                            "Congo (Rep.)" = "Republic of Congo")) %>%
+  
+  mutate(region = case_when((CC == "PRK") ~ "North Korea",
+                               TRUE ~ as.character(.$region)))
+
+
+worldgovt$HDI <- as.numeric(as.character(worldgovt$HDI))
+
+# Merge by region
+worldSubset <- inner_join(world, worldgovt, by = "region")
+
+
+## Unnecessary elements
+plain <- theme(
+  axis.text = element_blank(),
+  axis.line = element_blank(),
+  axis.ticks = element_blank(),
+  panel.border = element_blank(),
+  panel.grid = element_blank(),
+  axis.title = element_blank(),
+  panel.background = element_rect(fill = "white"),
+  plot.title = element_text(hjust = 0.5)
+)
+#End of unnecessary elements
+
+# The MAP
+worldHDI <- ggplot(data = worldSubset, mapping = aes(x = long, y = lat, group = group)) + 
+  coord_fixed(1.3) +
+  geom_polygon(aes(fill = HDI)) +
+  scale_fill_distiller(palette ="RdBu", direction = -1) + 
+  ggtitle("Global Human Development Index in 2017 (HDI)") +
+  plain
+
+worldHDI
+
+```
+
+
+# GDP per capita
+
+```{r}
+# Gdp per capita geom line of china compared to France / Canada / USA
+
+#Loading data and filter
+gdppercap <- WDI(country = c("FR", "CA", "US","CN"),indicator = "NY.GDP.PCAP.CD", start = 1970 )
+gdppercap <- dplyr::rename(gdppercap, gdp = NY.GDP.PCAP.CD )
+
+# Visualisation
+
+ggplot(data = gdppercap, aes(x = year, y = gdp, colour = country)) + 
+  geom_line()
+
+```
+
+
+
+
+
+-----------------------------------------------------------------------
+
+# Unemployment rate (%)
+
+```{r echo = FALSE, warning = FALSE, message=FALSE}
+unemploy <- WDI(indicator = "UNEMPSA_", 
+                   country = c("FR", "CA", "US","CN"), 
+                   start = 2000, 
+                   end = 2014)
+
+unemploy <- dplyr::rename(unemploy, Unemployment = UNEMPSA_)
+
+ggplot(data = unemploy, mapping= aes(color = country)) + 
+  
+  geom_point(mapping = aes(x = year, y = Unemployment)) +
+geom_smooth(mapping = aes(x = year, y = Unemployment))
+
+```
+
+
+
+
+
+
+
+
+
+
+
