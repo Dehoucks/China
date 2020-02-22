@@ -28,7 +28,7 @@ options(scipen = 999) ## To disable scientific notation
 Column {data-width=600}
 -------------------------------------
     
-###                                                                                  GDP(US $)
+### GDP(US $)
 
 ```{r}
 
@@ -44,7 +44,7 @@ ggplot(data = chinagdp, aes(x = year, y = gdp, colour = country)) +
    
 Column {data-width=400}
 -------------------------------------
-   
+
 ### GDP growth rate of China (2000 -> 2017)
     
 ```{r}
@@ -53,12 +53,21 @@ gauge(1010, min = 0, max = 1100, symbol = '%', gaugeSectors(
   success = c(1000, 1100), warning = c(40, 79), danger = c(0, 39)))
   
 ```
+
+### Description
+
+
+China has the **world's fastest-growing major economy**, with growth rates averaging *6%* over 30 years. In this topic, we will study differents interesting indicators comparing China to developed countries, and we will try to understand **why China is still a developing country**.
+
+
  
-###                                                                                 Description
+### GDP growth rate of USA (2000 -> 2017)
 
-
-China has the **world's fastest-growing major economy**, with growth rates averaging *6%*. In this topic, we will study different interesting indicators comparing China to developed countries, and will try to understand **why China is still a developing country**.
-
+```{r}
+# indicator
+gauge(188, min = 0, max = 1100, symbol = '%', gaugeSectors(
+  success = c(301, 1100), warning = c(150, 300), danger = c(0, 149)))
+```
 
 
 
